@@ -24,6 +24,9 @@ func (b *Bithumb) GetETHPrice(info *WMP) error {
 	count := 20
 	price := 0.0
 
+	askset := false
+	bidset := false
+
 	for i := 0; i < count; i++ {
 		price += trans_json_rec_info.Data[i].Price
 		info.Units += trans_json_rec_info.Data[i].Units
@@ -32,11 +35,19 @@ func (b *Bithumb) GetETHPrice(info *WMP) error {
 			{
 				info.Bid++
 				info.BidUnit += trans_json_rec_info.Data[i].Units
+				if !bidset {
+					info.RecentBid = trans_json_rec_info.Data[i].Price
+					bidset = true
+				}
 			}
 		case "ask":
 			{
 				info.Ask++
 				info.AskUnit += trans_json_rec_info.Data[i].Units
+				if !askset {
+					info.RecentAsk = trans_json_rec_info.Data[i].Price
+					askset = true
+				}
 			}
 		}
 	}

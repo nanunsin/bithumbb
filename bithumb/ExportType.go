@@ -18,10 +18,12 @@ type Market_Info struct {
 }
 
 type WMP struct {
-	Price   float64
-	Units   float64
-	Ask     int
-	AskUnit float64
-	Bid     int
-	BidUnit float64
+	Price     float64
+	Units     float64
+	Ask       int
+	AskUnit   float64
+	RecentAsk float64
+	Bid       int
+	BidUnit   float64
+	RecentBid float64
 }
