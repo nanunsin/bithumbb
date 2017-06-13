@@ -2,12 +2,13 @@ package bithumb
 
 import (
 	"fmt"
+	"math"
 	"testing"
 )
 
 func TestGetETHPrice(t *testing.T) {
-	t.Log("test1")
 
+	t.Log("start")
 	bot := NewBithumb("test", "secret")
 	var info WMP
 	err := bot.GetETHPrice(&info)
@@ -21,4 +22,29 @@ func TestGetETHPrice(t *testing.T) {
 	if info.RecentAsk != 0.0 && info.RecentBid != 0.0 {
 		fmt.Printf("Gap: (%.2f - %.2f) = %.2f\n", info.RecentBid, info.RecentAsk, info.RecentBid-info.RecentAsk)
 	}
+}
+
+func TestGetETHPrice2(t *testing.T) {
+
+	t.Log("start2")
+	bot := NewBithumb("test", "secret")
+	var info WMP
+	err := bot.GetETHPrice(&info)
+	if err != nil {
+		t.Errorf("err : %v\n", err.Error())
+	}
+
+	fmt.Printf("Price: %.2f\n", info.Price)
+	fmt.Printf("Gap: (%.2f - %.2f) = %.2f\n", info.RecentBid, info.RecentAsk, info.RecentBid-info.RecentAsk)
+
+	upper := math.Floor(info.Price/100.0) * 100.0
+	lower := math.Mod(info.Price, 100.0)
+
+	if lower > 50.0 {
+		lower = 50.0
+	} else {
+		lower = 0.0
+	}
+
+	fmt.Printf("Right Price : %.f\n", upper+lower)
 }

@@ -11,6 +11,7 @@ type Ticker_info struct {
 
 type Market_Info struct {
 	Cont_id string
+	OrderId string
 	Units   float64
 	Price   float64
 	Total   float64

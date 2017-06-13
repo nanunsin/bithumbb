@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/url"
 )
 
+// Market buy
 func (b *Bithumb) BuyETH(units float64) (info [5]Market_Info) {
 
 	var market_json_info market_buy_json_rec
@@ -40,4 +42,28 @@ func (b *Bithumb) BuyETH(units float64) (info [5]Market_Info) {
 		log.Printf("%s\n", resp_data_str)
 	}
 	return
+}
+
+/*
+
+func (b *Bithumb) BuyETHEx(info *Market_Info, units float64) {
+
+	params := fmt.Sprintf("price=%d&units=%.1f&order_currency=ETH", units)
+
+	var market_json_info market_buy_json_rec
+
+}
+
+*/
+
+func setPlaceTradeParam(price int, unit float64) string {
+	v := url.Values{}
+
+	Price := fmt.Sprintf("%d", price)
+	Units := fmt.Sprintf("%.1f", unit)
+
+	v.Set("price", Price)
+	v.Set("units", Units)
+
+	return v.Encode()
 }

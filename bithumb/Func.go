@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math"
 	"time"
 )
 
@@ -104,4 +105,24 @@ func (b *Bithumb) GetETHRecTrans() {
 		}
 
 	}
+}
+
+func GetRightPrice() (price string) {
+	bot := NewBithumb("test", "secret")
+	var info WMP
+	err := bot.GetETHPrice(&info)
+	if err != nil {
+		log.Printf("[GRP][Error] : %s\n", err.Error())
+	}
+
+	upper := math.Floor(info.Price/100.0) * 100.0
+	lower := math.Mod(info.Price, 100.0)
+
+	if lower > 50.0 {
+		lower = 50.0
+	} else {
+		lower = 0.0
+	}
+	price = fmt.Sprintf("%.f", upper+lower)
+	return
 }

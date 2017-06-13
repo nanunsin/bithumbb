@@ -58,6 +58,7 @@ type market_buy_json_rec struct {
 
 type market_rec struct {
 	Cont_id string  `json:"cont_id"`
+	OrderID string  `json:"order_id"`
 	Units   float64 `json:"units,string"`
 	Price   float64 `json:"price,string"`
 	Total   float64 `json:"total"`
