@@ -53,7 +53,7 @@ func (b *Bithumb) GetETHPrice(info *WMP) error {
 		}
 	}
 
-	info.Price = price / float64(count)
+	info.Price = getRightPrice(price / float64(count))
 
 	return nil
 }
@@ -106,6 +106,23 @@ func (b *Bithumb) GetETHRecTrans() {
 
 	}
 }
+
+//////////////////////////////////
+// private
+func getRightPrice(price float64) (rightPrice float64) {
+	upper := math.Floor(price/100.0) * 100.0
+	lower := math.Mod(price, 100.0)
+
+	if lower > 50.0 {
+		lower = 50.0
+	} else {
+		lower = 0.0
+	}
+	rightPrice = upper + lower
+	return
+}
+
+// Util Function
 
 func GetRightPrice() (price string) {
 	bot := NewBithumb("test", "secret")
