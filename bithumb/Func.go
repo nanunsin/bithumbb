@@ -107,6 +107,38 @@ func (b *Bithumb) GetETHRecTrans() {
 	}
 }
 
+func (b *Bithumb) GetETHOrders(orderbook *OrderBook) bool {
+
+	var orderbookJSON orderbookJson
+	resp_data_str := b.apiCall("/public/orderbook/ETH", "")
+	//	fmt.Printf("%s\n", resp_data_str)
+
+	resp_data_bytes := []byte(resp_data_str)
+
+	err := json.Unmarshal(resp_data_bytes, &orderbookJSON)
+	if err != nil {
+		log.Println(err.Error())
+		return false
+	}
+
+	if orderbookJSON.Status != "0000" {
+		log.Printf("API Call Failed, %s\n", orderbookJSON.Status)
+		return false
+	}
+
+	for i := 0; i < 10; i++ {
+		BidData := orderbookJSON.Data.Bids[i]
+		AskData := orderbookJSON.Data.Asks[i]
+		// Copy
+		orderbook.Bids[i].Price = BidData.Price
+		orderbook.Bids[i].Quantity = BidData.Quantity
+
+		orderbook.Asks[i].Price = AskData.Price
+		orderbook.Asks[i].Quantity = AskData.Quantity
+	}
+	return true
+}
+
 //////////////////////////////////
 // private
 func getRightPrice(price float64) (rightPrice float64) {

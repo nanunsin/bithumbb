@@ -29,11 +29,11 @@ func (b *Bithumb) BuyETH(units float64) (info [5]Market_Info) {
 		fmt.Printf(" - Order_id : %s\n", market_json_info.Order_id)
 		for i, value := range market_json_info.Data {
 			fmt.Printf("[%d]\n", i)
-			fmt.Printf(" - Cont_id : %s\n", value.Cont_id)
+			fmt.Printf(" - ContID : %s\n", value.ContID)
 			fmt.Printf(" - Price : %.2f\n", value.Price)
 			fmt.Printf(" - Total : %.2f\n", value.Total)
 
-			info[i].Cont_id = value.Cont_id
+			info[i].ContID = value.ContID
 			info[i].Price = value.Price
 			info[i].Units = value.Units
 		}

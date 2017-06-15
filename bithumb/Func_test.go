@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math"
 	"testing"
+
+	color "github.com/fatih/color"
 )
 
 func TestGetETHPrice(t *testing.T) {
@@ -47,4 +49,28 @@ func TestGetETHPrice2(t *testing.T) {
 	}
 
 	fmt.Printf("Right Price : %.f\n", upper+lower)
+}
+
+func TestGetETHOrders(t *testing.T) {
+
+	t.Log("start3")
+	bot := NewBithumb("test", "secret")
+	var info OrderBook
+	result := bot.GetETHOrders(&info)
+	if !result {
+		t.Errorf("err\n")
+	}
+
+	for i := 9; i >= 0; i-- {
+		data := info.Asks[i]
+		c := color.New(color.FgRed)
+		c.Printf("%d | %.6f \n", data.Price, data.Quantity)
+	}
+
+	for i := 0; i < 10; i++ {
+		data := info.Bids[i]
+		c := color.New(color.FgGreen)
+		c.Printf("%d | %.6f \n", data.Price, data.Quantity)
+	}
+
 }

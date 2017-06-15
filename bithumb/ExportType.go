@@ -10,8 +10,8 @@ type Ticker_info struct {
 }
 
 type Market_Info struct {
-	Cont_id string
-	OrderId string
+	ContID  string
+	OrderID string
 	Units   float64
 	Price   float64
 	Total   float64
@@ -27,4 +27,14 @@ type WMP struct {
 	Bid       int
 	BidUnit   float64
 	RecentBid float64
+}
+
+type OrderBook struct {
+	Bids [10]OrderDetail
+	Asks [10]OrderDetail
+}
+
+type OrderDetail struct {
+	Price    uint64
+	Quantity float64
 }

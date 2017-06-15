@@ -57,10 +57,27 @@ type market_buy_json_rec struct {
 }
 
 type market_rec struct {
-	Cont_id string  `json:"cont_id"`
+	ContID  string  `json:"cont_id"`
 	OrderID string  `json:"order_id"`
 	Units   float64 `json:"units,string"`
 	Price   float64 `json:"price,string"`
 	Total   float64 `json:"total"`
 	Fee     float64 `json:"fee"`
+}
+
+// /public/orderbook struct
+type orderbookJson struct {
+	Status string        `json:"status"`
+	Data   orderbookData `json:"data"`
+}
+type orderbookData struct {
+	Timestamp     uint64           `json:"timestamp,string"`
+	OrderCurrency string           `json:"order_currency"`
+	Bids          []orderbookPrice `json:"bids"`
+	Asks          []orderbookPrice `json:"asks"`
+}
+
+type orderbookPrice struct {
+	Quantity float64 `json:"quantity,string"`
+	Price    uint64  `json:"price,string"`
 }
