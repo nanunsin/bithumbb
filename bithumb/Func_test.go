@@ -72,5 +72,12 @@ func TestGetETHOrders(t *testing.T) {
 		c := color.New(color.FgGreen)
 		c.Printf("%d | %.6f \n", data.Price, data.Quantity)
 	}
+}
+
+func TestGetETHTrans(t *testing.T) {
+
+	t.Log("start3")
+	bot := NewBithumb("test", "secret")
+	bot.GetETHRecTrans()
 
 }
