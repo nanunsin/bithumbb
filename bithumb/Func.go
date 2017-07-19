@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"math"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -85,7 +87,7 @@ func (b *Bithumb) GetBTCPrice(info *Ticker_info) error {
 
 func (b *Bithumb) GetETHRecTrans() {
 
-	var trans_json_rec_info trans_json_rec
+	var trans_json_rec_info recTransactions
 	resp_data_str := b.apiCall("/public/recent_transactions/ETH", "")
 	//	fmt.Printf("%s\n", resp_data_str)
 
@@ -101,9 +103,9 @@ func (b *Bithumb) GetETHRecTrans() {
 
 	for i := 0; i < count; i++ {
 		if trans_json_rec_info.Data[i].Units > 5 {
-			fmt.Printf("[%s] %.f\t%.f\t%s\n", trans_json_rec_info.Data[i].Type, trans_json_rec_info.Data[i].Price, trans_json_rec_info.Data[i].Units, trans_json_rec_info.Data[i].Date)
+			t := AnalyzeDate(trans_json_rec_info.Data[i].Date)
+			fmt.Printf("[%s] %.f\t%.f\t%s\n", trans_json_rec_info.Data[i].Type, trans_json_rec_info.Data[i].Price, trans_json_rec_info.Data[i].Units, t)
 		}
-
 	}
 }
 
@@ -174,4 +176,19 @@ func GetRightPrice() (price string) {
 	}
 	price = fmt.Sprintf("%.f", upper+lower)
 	return
+}
+
+func AnalyzeDate(dateSrc string) time.Time {
+	date := strings.Split(dateSrc, " ")
+
+	year, month, day := time.Now().Date()
+
+	hhmmss := strings.Split(date[1], ":")
+	hh, _ := strconv.Atoi(hhmmss[0])
+	mm, _ := strconv.Atoi(hhmmss[1])
+	ss, _ := strconv.Atoi(hhmmss[2])
+
+	local, _ := time.LoadLocation("Local")
+
+	return time.Date(year, month, day, hh, mm, ss, 0, local)
 }
