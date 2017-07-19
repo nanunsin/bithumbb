@@ -96,7 +96,8 @@ type placeData struct {
 	Price  float64 `json:"price,string"`
 	Total  float64 `json:"total"`
 	Fee    float64 `json:"fee"`
-	
+}
+
 // /public/recent_transactions
 type transactiondata struct {
 	Date  string  `json:"transaction_date"`
