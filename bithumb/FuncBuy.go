@@ -44,17 +44,55 @@ func (b *Bithumb) BuyETH(units float64) (info [5]Market_Info) {
 	return
 }
 
-/*
+func (b *Bithumb) BuyETHEx(info *PlaceInfo, units float64) {
 
-func (b *Bithumb) BuyETHEx(info *Market_Info, units float64) {
+	bDone := make(chan bool)
+	var price int
 
-	params := fmt.Sprintf("price=%d&units=%.1f&order_currency=ETH", units)
+	go func() {
+		var currentPrice WMP
+		err := b.GetETHPrice(&currentPrice)
+		if err != nil {
+			bDone <- false
+		} else {
+			price = int(currentPrice.Price)
+			bDone <- true
+		}
+	}()
 
-	var market_json_info market_buy_json_rec
+	if <-bDone {
+		params := fmt.Sprintf("price=%d&units=%.1f&order_currency=ETH", units)
 
+		var placejson placeJson
+		resp_data_str := b.apiCall("/trade/place", params)
+
+		resp_data_bytes := []byte(resp_data_str)
+
+		err := json.Unmarshal(resp_data_bytes, &placejson)
+		if err != nil {
+			log.Printf("%s\n", resp_data_str)
+			log.Println(err.Error())
+			return
+		}
+
+		if placejson.Status == "0000" {
+			fmt.Printf(" - Order_id : %s\n", placejson.OrderID)
+			for i, value := range placejson.Data {
+				fmt.Printf("[%d]\n", i)
+				fmt.Printf(" - ContID : %s\n", value.ContID)
+				fmt.Printf(" - Price : %.2f\n", value.Price)
+				fmt.Printf(" - Total : %.2f\n", value.Total)
+
+				info.ContID = value.ContID
+				info.Price = value.Price
+				info.Units = value.Units
+			}
+
+		} else {
+			log.Printf("%s\n", resp_data_str)
+		}
+	}
 }
-
-*/
 
 func setPlaceTradeParam(price int, unit float64) string {
 	v := url.Values{}

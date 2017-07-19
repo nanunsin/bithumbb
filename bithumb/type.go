@@ -81,3 +81,19 @@ type orderbookPrice struct {
 	Quantity float64 `json:"quantity,string"`
 	Price    uint64  `json:"price,string"`
 }
+
+//  /trade/place
+
+type placeJson struct {
+	Status  string      `json:"status"`
+	OrderID string      `json:"order_id"`
+	Data    []placeData `json:"data"`
+}
+
+type placeData struct {
+	ContID string  `json:"cont_id"`
+	Units  float64 `json:"units,string"`
+	Price  float64 `json:"price,string"`
+	Total  float64 `json:"total"`
+	Fee    float64 `json:"fee"`
+}

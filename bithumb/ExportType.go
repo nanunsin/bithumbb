@@ -38,3 +38,12 @@ type OrderDetail struct {
 	Price    uint64
 	Quantity float64
 }
+
+// trade/place
+type PlaceInfo struct {
+	ContID string
+	Units  float64
+	Price  float64
+	Total  float64
+	Fee    float64
+}
