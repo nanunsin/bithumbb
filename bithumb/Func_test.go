@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"testing"
+	"time"
 
 	color "github.com/fatih/color"
 )
@@ -79,5 +80,8 @@ func TestGetETHTrans(t *testing.T) {
 	t.Log("start3")
 	bot := NewBithumb("test", "secret")
 	bot.GetETHRecTrans()
-
+	time.Sleep(3)
+	bot.GetETHRecTrans()
+	time.Sleep(3)
+	bot.GetETHRecTrans()
 }
