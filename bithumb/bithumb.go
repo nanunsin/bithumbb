@@ -61,6 +61,26 @@ func NewBithumb(key, secret string) *Bithumb {
 	}
 }
 
+func (b *Bithumb) publicApiCall(endpoint, params string) (resp_data_str string) {
+	var api_url = "https://api.bithumb.com"
+
+	params = "?" + params
+
+	// Connects to Bithumb API server and returns JSON result value.
+	client := &http.Client{}
+	http_req, _ := http.NewRequest("GET", api_url+endpoint+params, nil) // URL-encoded payload
+
+	resp, err := client.Do(http_req)
+	if err != nil {
+		return ("")
+	}
+
+	resp_data, err := ioutil.ReadAll(resp.Body)
+	resp_data_str = string(resp_data)
+
+	return (resp_data_str)
+}
+
 func (b *Bithumb) apiCall(endpoint, params string) (resp_data_str string) {
 	var api_url = "https://api.bithumb.com"
 
