@@ -87,16 +87,10 @@ func (b *Bithumb) GetBTCPrice(info *Ticker_info) error {
 
 func (b *Bithumb) GetETHRecTrans() {
 
-<<<<<<< HEAD
-	var transJSON recTransactions
-	respDataStr := b.publicApiCall("/public/recent_transactions/ETH", "count=10")
-	//	fmt.Printf("%s\n", resp_data_str)
-=======
 	params := fmt.Sprintf("offset=0&count=%d", 100)
-	var trans_json_rec_info recTransactions
-	resp_data_str := b.publicApiCall("/public/recent_transactions/ETH", params)
+	var transJSON recTransactions
+	respDataStr := b.publicApiCall("/public/recent_transactions/ETH", params)
 	//fmt.Printf("%s\n", resp_data_str)
->>>>>>> 971a5881395769ddb66efd4d4ff8eb61c3840936
 
 	respDataBytes := []byte(respDataStr)
 
@@ -106,50 +100,23 @@ func (b *Bithumb) GetETHRecTrans() {
 		return
 	}
 
-<<<<<<< HEAD
-	var bidSum, askSum float64
-
-	for _, value := range transJSON.Data {
-		t := AnalyzeDate(value.Date)
-		if b.lasttime.Equal(t) {
-			log.Printf("out:%v=%v\n", b.lasttime, t)
-			return
-		}
-
-		//		if value.Units > 5 {
-
-		fmt.Printf("[%s] %.f\t%.5f\t%s\n", value.Type, value.Price, value.Units, t)
-		//		}
-
-		switch value.Type {
-		case "bid":
-			bidSum += value.Units
-		case "ask":
-			askSum += value.Units
-		}
-	}
-
-	fmt.Println("----------------")
-	//fmt.Printf("bid: %.5f\nask: %.5f\n", bidSum, askSum)
-	b.lasttime = AnalyzeDate(transJSON.Data[0].Date)
-=======
 	//count := 100
-	count := len(trans_json_rec_info.Data)
+	count := len(transJSON.Data)
 	fmt.Printf("len : %d\n", count)
 
 	bidSum := 0.0
 	askSum := 0.0
 
 	for i := 0; i < count; i++ {
-		if trans_json_rec_info.Data[i].Units > 5 {
-			t := AnalyzeDate(trans_json_rec_info.Data[i].Date)
-			fmt.Printf("[%s] %.f\t%.f\t%s\n", trans_json_rec_info.Data[i].Type, trans_json_rec_info.Data[i].Price, trans_json_rec_info.Data[i].Units, t)
+		if transJSON.Data[i].Units > 5 {
+			t := AnalyzeDate(transJSON.Data[i].Date)
+			fmt.Printf("[%s] %.f\t%.f\t%s\n", transJSON.Data[i].Type, transJSON.Data[i].Price, transJSON.Data[i].Units, t)
 
-			switch trans_json_rec_info.Data[i].Type {
+			switch transJSON.Data[i].Type {
 			case "bid":
-				bidSum += trans_json_rec_info.Data[i].Units
+				bidSum += transJSON.Data[i].Units
 			case "ask":
-				askSum += trans_json_rec_info.Data[i].Units
+				askSum += transJSON.Data[i].Units
 			}
 		}
 	}
@@ -157,7 +124,6 @@ func (b *Bithumb) GetETHRecTrans() {
 	fmt.Println("-------------")
 	fmt.Printf("Bid : %.5f\n", bidSum)
 	fmt.Printf("Ask : %.5f\n", askSum)
->>>>>>> 971a5881395769ddb66efd4d4ff8eb61c3840936
 }
 
 func (b *Bithumb) GetETHOrders(orderbook *OrderBook) bool {
