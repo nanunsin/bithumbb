@@ -60,6 +60,71 @@ func (b *Bithumb) GetETHPrice(info *WMP) error {
 	return nil
 }
 
+func (b *Bithumb) GetPrice(nType int, info *WMP) error {
+
+	restapi := "/public/recent_transactions"
+	var coinType string
+	switch nType {
+	case 1: // BTC
+		coinType = fmt.Sprintf("%s/%s", restapi, "BTC")
+	case 2: // ETH
+		coinType = fmt.Sprintf("%s/%s", restapi, "ETH")
+	case 3: // LTC
+		coinType = fmt.Sprintf("%s/%s", restapi, "LTC")
+	case 4: // BCH
+		coinType = fmt.Sprintf("%s/%s", restapi, "BCH")
+	default:
+
+	}
+
+	var trans_json_rec_info trans_json_rec
+	resp_data_str := b.apiCall(coinType, "")
+	//	fmt.Printf("%s\n", resp_data_str)
+
+	resp_data_bytes := []byte(resp_data_str)
+
+	err := json.Unmarshal(resp_data_bytes, &trans_json_rec_info)
+	if err != nil {
+		log.Println(err.Error())
+		return err
+	}
+
+	count := 20
+	price := 0.0
+
+	askset := false
+	bidset := false
+
+	for i := 0; i < count; i++ {
+		price += trans_json_rec_info.Data[i].Price
+		info.Units += trans_json_rec_info.Data[i].Units
+		switch trans_json_rec_info.Data[i].Type {
+		case "bid":
+			{
+				info.Bid++
+				info.BidUnit += trans_json_rec_info.Data[i].Units
+				if !bidset {
+					info.RecentBid = trans_json_rec_info.Data[i].Price
+					bidset = true
+				}
+			}
+		case "ask":
+			{
+				info.Ask++
+				info.AskUnit += trans_json_rec_info.Data[i].Units
+				if !askset {
+					info.RecentAsk = trans_json_rec_info.Data[i].Price
+					askset = true
+				}
+			}
+		}
+	}
+
+	info.Price = getRightPrice(price / float64(count))
+
+	return nil
+}
+
 func (b *Bithumb) GetBTCPrice(info *Ticker_info) error {
 
 	var ticker_json_rec_info ticker_json_rec
