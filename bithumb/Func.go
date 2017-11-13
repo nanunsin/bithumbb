@@ -69,12 +69,24 @@ func (b *Bithumb) GetPrice(nType int, info *WMP) error {
 		coinType = fmt.Sprintf("%s/%s", restapi, "BTC")
 	case 2: // ETH
 		coinType = fmt.Sprintf("%s/%s", restapi, "ETH")
-	case 3: // LTC
+	case 3: // DASH
+		coinType = fmt.Sprintf("%s/%s", restapi, "DASH")
+	case 4: // LTC
 		coinType = fmt.Sprintf("%s/%s", restapi, "LTC")
-	case 4: // BCH
+	case 5: // ETC
+		coinType = fmt.Sprintf("%s/%s", restapi, "ETC")
+	case 6: // XRP
+		coinType = fmt.Sprintf("%s/%s", restapi, "XRP")
+	case 7: // BCH
 		coinType = fmt.Sprintf("%s/%s", restapi, "BCH")
+	case 8: // XMR
+		coinType = fmt.Sprintf("%s/%s", restapi, "XMR")
+	case 9: // ZEC
+		coinType = fmt.Sprintf("%s/%s", restapi, "ZEC")
+	case 10: // QTUM
+		coinType = fmt.Sprintf("%s/%s", restapi, "QTUM")
 	default:
-
+		break
 	}
 
 	var trans_json_rec_info trans_json_rec
