@@ -48,7 +48,7 @@ func (b *Bithumb) BuyETH(units float64) (info [5]Market_Info) {
 func (b *Bithumb) BuyPlaceETH(price int, units float64) (info [5]Market_Info) {
 
 	var market_json_info market_buy_json_rec
-	params := fmt.Sprintf("price=%d&units=%.1f&order_currency=ETH&type=bid", price, units)
+	params := fmt.Sprintf("price=%d&units=%.2f&order_currency=ETH&type=bid", price, units)
 
 	fmt.Printf("params: %s\n", params)
 	resp_data_str := b.apiCall("/trade/place", params)
