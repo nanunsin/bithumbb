@@ -6,7 +6,7 @@ import "time"
 // New Type
 type TickerInfo struct {
 	Date  time.Time
-	Price int32
+	Price int64
 }
 
 /////////////////////////////////////////////////

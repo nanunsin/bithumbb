@@ -29,7 +29,7 @@ type trans_rec struct {
 // Ticker JSON structure
 
 type tickerInfo struct {
-	ClosingPrice int32 `json:"closing_price,string"`
+	ClosingPrice int64 `json:"closing_price,string"`
 	Date         int64 `json:"date,string"`
 }
 
