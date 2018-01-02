@@ -2,6 +2,17 @@ package bithumb
 
 import "time"
 
+/////////////////////////////////////////////////
+// New Type
+type TickerInfo struct {
+	Date  time.Time
+	Price int
+	Min   int
+	Max   int
+}
+
+/////////////////////////////////////////////////
+
 type Ticker_info struct {
 	Date  time.Time
 	Price float64

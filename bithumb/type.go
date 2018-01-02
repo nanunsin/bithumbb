@@ -26,6 +26,18 @@ type trans_rec struct {
 	Total int64   `json:"total,string"`
 }
 
+// Ticker JSON structure
+
+type tickerInfo struct {
+	ClosingPrice int   `json:"closing_price,string"`
+	Date         int64 `json:"date,string"`
+}
+
+type tickerJson struct {
+	Status string     `json:"status"`
+	Data   tickerInfo `json:"data"`
+}
+
 // Recent_transactions JSON structure
 type trans_json_rec struct {
 	Status string      `json:"status"`

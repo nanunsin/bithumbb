@@ -60,79 +60,27 @@ func (b *Bithumb) GetETHPrice(info *WMP) error {
 	return nil
 }
 
-func (b *Bithumb) GetPrice(nType int, info *WMP) error {
+func (b *Bithumb) GetPrice(name string, info *TickerInfo) error {
 
-	restapi := "/public/recent_transactions"
-	var coinType string
-	switch nType {
-	case 1: // BTC
-		coinType = fmt.Sprintf("%s/%s", restapi, "BTC")
-	case 2: // ETH
-		coinType = fmt.Sprintf("%s/%s", restapi, "ETH")
-	case 3: // DASH
-		coinType = fmt.Sprintf("%s/%s", restapi, "DASH")
-	case 4: // LTC
-		coinType = fmt.Sprintf("%s/%s", restapi, "LTC")
-	case 5: // ETC
-		coinType = fmt.Sprintf("%s/%s", restapi, "ETC")
-	case 6: // XRP
-		coinType = fmt.Sprintf("%s/%s", restapi, "XRP")
-	case 7: // BCH
-		coinType = fmt.Sprintf("%s/%s", restapi, "BCH")
-	case 8: // XMR
-		coinType = fmt.Sprintf("%s/%s", restapi, "XMR")
-	case 9: // ZEC
-		coinType = fmt.Sprintf("%s/%s", restapi, "ZEC")
-	case 10: // QTUM
-		coinType = fmt.Sprintf("%s/%s", restapi, "QTUM")
-	default:
-		break
+	if len(name) == 0 {
+		return fmt.Errorf("invalid parameter.(name)")
 	}
+	restapi := fmt.Sprintf("/public/ticker/%s", name)
 
-	var trans_json_rec_info trans_json_rec
-	resp_data_str := b.apiCall(coinType, "")
+	var tickdata tickerJson
+	resp_data_str := b.apiCall(restapi, "")
 	//	fmt.Printf("%s\n", resp_data_str)
 
 	resp_data_bytes := []byte(resp_data_str)
 
-	err := json.Unmarshal(resp_data_bytes, &trans_json_rec_info)
+	err := json.Unmarshal(resp_data_bytes, &tickdata)
 	if err != nil {
 		log.Println(err.Error())
 		return err
 	}
 
-	count := 20
-	price := 0.0
-
-	askset := false
-	bidset := false
-
-	for i := 0; i < count; i++ {
-		price += trans_json_rec_info.Data[i].Price
-		info.Units += trans_json_rec_info.Data[i].Units
-		switch trans_json_rec_info.Data[i].Type {
-		case "bid":
-			{
-				info.Bid++
-				info.BidUnit += trans_json_rec_info.Data[i].Units
-				if !bidset {
-					info.RecentBid = trans_json_rec_info.Data[i].Price
-					bidset = true
-				}
-			}
-		case "ask":
-			{
-				info.Ask++
-				info.AskUnit += trans_json_rec_info.Data[i].Units
-				if !askset {
-					info.RecentAsk = trans_json_rec_info.Data[i].Price
-					askset = true
-				}
-			}
-		}
-	}
-
-	info.Price = getRightPrice(price / float64(count))
+	info.Date = time.Unix(tickdata.Data.Date/1000, 0)
+	info.Price = tickdata.Data.ClosingPrice
 
 	return nil
 }
