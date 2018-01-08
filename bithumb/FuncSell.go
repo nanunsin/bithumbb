@@ -114,10 +114,10 @@ func (b *Bithumb) SellETH(units float64) (info [5]Market_Info) {
 	return
 }
 
-func (b *Bithumb) SellPlaceXRP(price int, units float64) (info [5]Market_Info) {
+func (b *Bithumb) SellPlace(coin string, price int, units float64) (info [5]Market_Info) {
 
 	var market_json_info market_buy_json_rec
-	params := fmt.Sprintf("price=%d&units=%.1f&order_currency=XRP&type=ask", price, units)
+	params := fmt.Sprintf("price=%d&units=%.1f&order_currency=%s&type=ask", price, units, coin)
 
 	fmt.Printf("params: %s\n", params)
 	resp_data_str := b.apiCall("/trade/place", params)
