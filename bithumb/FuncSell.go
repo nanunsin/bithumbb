@@ -78,7 +78,7 @@ func (b *Bithumb) SellPlaceETH(price int, units float64) (info [5]Market_Info) {
 	return
 }
 
-func (b *Bithumb) SellETH(units float64) (info [5]Market_Info) {
+func (b *Bithumb) SellETHEx(units float64) (info [5]Market_Info) {
 
 	var market_json_info market_buy_json_rec
 	params := fmt.Sprintf("units=%.1f&currency=ETH", units)
