@@ -85,6 +85,10 @@ func (b *Bithumb) BuyPlace(coin string, price int, units float64) (info [5]Marke
 
 	var market_json_info market_buy_json_rec
 	params := fmt.Sprintf("price=%d&units=%.2f&order_currency=%s&type=bid", price, units, coin)
+	if coin == "XRP" {
+		params = fmt.Sprintf("price=%d&units=%d&order_currency=%s&type=bid", price, units, coin)
+	}
+	//params := fmt.Sprintf("price=%d&units=%.2f&order_currency=%s&type=bid", price, units, coin)
 
 	fmt.Printf("params: %s\n", params)
 	resp_data_str := b.apiCall("/trade/place", params)
