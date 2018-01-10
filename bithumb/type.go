@@ -123,3 +123,7 @@ type recTransactions struct {
 	Status string            `json:"status"`
 	Data   []transactiondata `json:"data"`
 }
+
+type DefaultReturn struct {
+	Status string `json:"status"`
+}

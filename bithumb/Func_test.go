@@ -7,6 +7,7 @@ import (
 	"time"
 
 	color "github.com/fatih/color"
+	"github.com/nanunsin/bithumbb/bithumb"
 )
 
 func TestGetPrice(t *testing.T) {
@@ -96,4 +97,19 @@ func TestGetETHTrans(t *testing.T) {
 	bot.GetETHRecTrans()
 	time.Sleep(3)
 	bot.GetETHRecTrans()
+}
+
+func TestGetRecTrans(t *testing.T) {
+	t.Log("Start TestGeRecTrans")
+	bot := NewBithumb("test", "sec")
+	bot.GetRecTrans("XRP")
+}
+
+func TestCancelTrade(t *testing.T) {
+	t.Log("Start CancelTrade")
+	var apikey = "a494ddf2af67b4c26abac8bb7cab0d07"
+	var apisecret = "996d008d570274fc325e1f8e2e11c4eb"
+
+	bit := bithumb.NewBithumb(apikey, apisecret)
+	bit.CancelTrade("ETH", "1515564869712059", "bid")
 }

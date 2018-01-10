@@ -234,3 +234,65 @@ func AnalyzeDate(dateSrc string) time.Time {
 
 	return time.Date(year, month, day, hh, mm, ss, 0, local)
 }
+
+// Common Coin Function
+func (b *Bithumb) GetRecTrans(coin string) {
+
+	params := fmt.Sprintf("offset=0&count=%d", 100)
+	var transJSON recTransactions
+	qry := fmt.Sprintf("/public/recent_transactions/%s", coin)
+	respDataStr := b.publicApiCall(qry, params)
+	//fmt.Printf("%s\n", resp_data_str)
+
+	respDataBytes := []byte(respDataStr)
+
+	err := json.Unmarshal(respDataBytes, &transJSON)
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	count := len(transJSON.Data)
+
+	bidSum := 0.0
+	askSum := 0.0
+	totalSum := 0.0
+
+	for i := 0; i < count; i++ {
+
+		t := AnalyzeDate(transJSON.Data[i].Date)
+		fmt.Printf("[%s] %.f\t%.f\t%s\n", transJSON.Data[i].Type, transJSON.Data[i].Price, transJSON.Data[i].Units, t)
+
+		switch transJSON.Data[i].Type {
+		case "bid":
+			bidSum += transJSON.Data[i].Units
+		case "ask":
+			askSum += transJSON.Data[i].Units
+		}
+
+		totalSum += transJSON.Data[i].Total
+
+	}
+
+	fmt.Println("-------------")
+	fmt.Printf("Bid : %.5f\n", bidSum)
+	fmt.Printf("Ask : %.5f\n", askSum)
+	fmt.Printf("Total: %.5f\n", totalSum)
+
+}
+
+func (b *Bithumb) CancelTrade(coin, orderid, ordertype string) {
+
+	params := fmt.Sprintf("currency=%s&order_id=%s&type=%s", coin, orderid, ordertype)
+	var retJSON DefaultReturn
+	respDataStr := b.publicApiCall("/trade/cancel", params)
+	//fmt.Printf("%s\n", resp_data_str)
+
+	respDataBytes := []byte(respDataStr)
+
+	err := json.Unmarshal(respDataBytes, &retJSON)
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	fmt.Println(retJSON)
+}
