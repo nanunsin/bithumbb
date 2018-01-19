@@ -284,7 +284,7 @@ func (b *Bithumb) CancelTrade(coin, orderid, ordertype string) {
 
 	params := fmt.Sprintf("currency=%s&order_id=%s&type=%s", coin, orderid, ordertype)
 	var retJSON DefaultReturn
-	respDataStr := b.publicApiCall("/trade/cancel", params)
+	respDataStr := b.apiCall("/trade/cancel", params)
 	//fmt.Printf("%s\n", resp_data_str)
 
 	respDataBytes := []byte(respDataStr)
@@ -300,7 +300,7 @@ func (b *Bithumb) CancelTrade(coin, orderid, ordertype string) {
 func (b *Bithumb) GetBalance(info *BalanceInfo) {
 	params := fmt.Sprintf("currency=All")
 	var retJSON balanceJson
-	respDataStr := b.publicApiCall("/info/balance", params)
+	respDataStr := b.apiCall("/info/balance", params)
 	//fmt.Printf("%s\n", resp_data_str)
 
 	respDataBytes := []byte(respDataStr)
@@ -311,7 +311,8 @@ func (b *Bithumb) GetBalance(info *BalanceInfo) {
 	}
 
 	if retJSON.Status != "0000" {
-		info.Status = "0000"
+		info.Status = retJSON.Status
+		fmt.Println(retJSON)
 		info.TotalXRP = retJSON.Data.TotalXRP
 		info.TotalKRW = retJSON.Data.TotalKRW
 
@@ -325,7 +326,7 @@ func (b *Bithumb) GetBalance(info *BalanceInfo) {
 func (b *Bithumb) GetOrderResult(orderID, orderType, coin string, info *OrderDetailInfo) {
 	params := fmt.Sprintf("order_id=%s&type=%s&currency=%s", orderID, orderType, coin)
 	var retJSON orderdetailJson
-	respDataStr := b.publicApiCall("/info/order_detail", params)
+	respDataStr := b.apiCall("/info/order_detail", params)
 	//fmt.Printf("%s\n", resp_data_str)
 
 	respDataBytes := []byte(respDataStr)
