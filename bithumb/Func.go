@@ -304,7 +304,7 @@ func (b *Bithumb) GetBalance(info *BalanceInfo) {
 	//fmt.Printf("%s\n", resp_data_str)
 
 	respDataBytes := []byte(respDataStr)
-	fmt.Println(respDataBytes)
+	fmt.Println(string(respDataBytes))
 
 	err := json.Unmarshal(respDataBytes, &retJSON)
 	if err != nil {
