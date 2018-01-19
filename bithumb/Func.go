@@ -310,14 +310,14 @@ func (b *Bithumb) GetBalance(info *BalanceInfo) {
 		log.Println(err.Error())
 	}
 
+	fmt.Println(retJSON)
+
 	if retJSON.Status != "0000" {
 		info.Status = retJSON.Status
-		fmt.Println(retJSON)
-		info.TotalXRP = retJSON.Data.TotalXRP
-		info.TotalKRW = retJSON.Data.TotalKRW
-
 	} else {
 		info.Status = retJSON.Status
+		info.TotalXRP = retJSON.Data.TotalXRP
+		info.TotalKRW = retJSON.Data.TotalKRW
 	}
 
 	fmt.Println(info)
