@@ -127,3 +127,34 @@ type recTransactions struct {
 type DefaultReturn struct {
 	Status string `json:"status"`
 }
+
+// /private /info/balance
+type balancedata struct {
+	TotalBTC  float64 `json:"total_btc,string"`
+	TotalETH  float64 `json:"total_eth,string"`
+	TotalLTC  float64 `json:"total_ltc,string"`
+	TotalETC  float64 `json:"total_etc,string"`
+	TotalEOS  float64 `json:"total_eos,string"`
+	TotalXRP  float64 `json:"total_xrp,string"`
+	TotalQTUM float64 `json:"total_qtum,string"`
+	TotalKRW  int64   `json:"total_krw,string"`
+}
+
+type balanceJson struct {
+	Status string      `json:"status"`
+	Data   balancedata `json:"data"`
+}
+
+// /private /info/order_detail
+
+type orderdetaildata struct {
+	Type          string  `json:"type"`
+	OrderCurrency string  `json:"order_currency"`
+	Units         float64 `json:"units_traded,string"`
+	Price         int64   `json:"price,string"`
+}
+
+type orderdetailJson struct {
+	Status string            `json:"status"`
+	Data   []orderdetaildata `json:"data"`
+}

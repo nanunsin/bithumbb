@@ -56,3 +56,17 @@ type PlaceInfo struct {
 	Total  float64
 	Fee    float64
 }
+
+// info/ Balance
+type BalanceInfo struct {
+	Status   string
+	TotalXRP float64
+	TotalKRW int64
+}
+
+// info/ order_detail
+type OrderDetailInfo struct {
+	Status string
+	Units  float64
+	Price  int64
+}
