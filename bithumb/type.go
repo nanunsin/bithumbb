@@ -137,7 +137,7 @@ type balancedata struct {
 	TotalEOS  float64 `json:"total_eos,string"`
 	TotalXRP  float64 `json:"total_xrp,string"`
 	TotalQTUM float64 `json:"total_qtum,string"`
-	TotalKRW  int64   `json:"total_krw,string"`
+	TotalKRW  int64   `json:"total_krw"`
 }
 
 type balanceJson struct {
