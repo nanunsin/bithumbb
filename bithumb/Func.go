@@ -112,14 +112,14 @@ func (b *Bithumb) GetPriceAll(names []string, info *map[string]TickerInfo) error
 		for _, ct := range names {
 			if ct == k {
 				dt := v.(map[string]interface{})
-				closingPrice, e2 := strconv.ParseInt(dt["closing_price"].(string), 10, 64)
+				closingPrice, e2 := strconv.ParseFloat(dt["closing_price"].(string), 64)
 				if e2 != nil {
 					fmt.Println("[Error] ", dt["closing_price"])
 					panic(e2.Error())
 				}
 
 				result[k] = TickerInfo{
-					Price: closingPrice,
+					Price: int64(closingPrice),
 					Date:  time.Unix(date/1000, 0),
 				}
 			}
