@@ -85,6 +85,51 @@ func (b *Bithumb) GetPrice(name string, info *TickerInfo) error {
 	return nil
 }
 
+// GetPriceAll return Price in coin names(parameter)
+func (b *Bithumb) GetPriceAll(names []string, info *map[string]tickerInfo) error {
+	if len(names) == 0 {
+		return fmt.Errorf("invalid parameter.(name)")
+	}
+
+	result := make(map[string]tickerInfo)
+	tickdata := make(map[string]interface{})
+	respDataStr := b.apiCall("/public/ticker/ALL", "")
+
+	respDataBytes := []byte(respDataStr)
+
+	err := json.Unmarshal(respDataBytes, &tickdata)
+	if err != nil {
+		return err
+	}
+
+	coins := tickdata["data"].(map[string]interface{})
+	date, e1 := strconv.ParseInt(coins["date"].(string), 10, 64)
+	if e1 != nil {
+		return err
+	}
+
+	for k, v := range coins {
+		for _, ct := range names {
+			if ct == k {
+				dt := v.(map[string]interface{})
+				closingPrice, e2 := strconv.ParseInt(dt["closing_price"].(string), 10, 64)
+				if e2 != nil {
+					fmt.Println("[Error] ", dt["closing_price"])
+					panic(e2.Error())
+				}
+
+				result[k] = tickerInfo{
+					ClosingPrice: closingPrice,
+					Date:         date,
+				}
+			}
+		}
+	}
+	*info = result
+
+	return nil
+}
+
 func (b *Bithumb) GetBTCPrice(info *Ticker_info) error {
 
 	var ticker_json_rec_info ticker_json_rec
