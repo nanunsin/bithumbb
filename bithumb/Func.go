@@ -86,12 +86,12 @@ func (b *Bithumb) GetPrice(name string, info *TickerInfo) error {
 }
 
 // GetPriceAll return Price in coin names(parameter)
-func (b *Bithumb) GetPriceAll(names []string, info *map[string]tickerInfo) error {
+func (b *Bithumb) GetPriceAll(names []string, info *map[string]TickerInfo) error {
 	if len(names) == 0 {
 		return fmt.Errorf("invalid parameter.(name)")
 	}
 
-	result := make(map[string]tickerInfo)
+	result := make(map[string]TickerInfo)
 	tickdata := make(map[string]interface{})
 	respDataStr := b.apiCall("/public/ticker/ALL", "")
 
@@ -118,9 +118,9 @@ func (b *Bithumb) GetPriceAll(names []string, info *map[string]tickerInfo) error
 					panic(e2.Error())
 				}
 
-				result[k] = tickerInfo{
-					ClosingPrice: closingPrice,
-					Date:         date,
+				result[k] = TickerInfo{
+					Price: closingPrice,
+					Date:  time.Unix(date/1000, 0),
 				}
 			}
 		}
